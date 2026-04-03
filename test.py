@@ -1,8 +1,14 @@
+import os
 import subprocess
 
-def run_script(commands):
-    result=subprocess.run(
-            ["./a.out","--test-mode"],
+def remove_file(filename):
+    if(os.path.exists(filename)):
+        os.remove(filename)
+
+def run_script(commands,filename="test.db"):
+    remove_file("test.db")
+    result=subprocess.run(   
+            ["./a.out",filename,"--test-mode"],
             input = "\n".join(commands)+"\n",
             capture_output=True,
             text = True
@@ -43,3 +49,16 @@ def test_ID_Negative():
     expected_output = ["ID must be positive.","Executed."]
     output = run_script(input)
     assert output==expected_output
+
+def test_disk_persistence():
+    result1 = run_script(["insert 1 user1 user1.com",".exit"],filename="test_disk.db")
+    expected_result1 = ["Executed."]
+
+    assert result1==expected_result1
+
+    result2 = run_script(["select",".exit"],filename="test_disk.db")
+    expected_result2 = ["(1, user1, user1.com)","Executed."]
+
+    assert result2==expected_result2
+
+    remove_file("test_disk.db")
