@@ -62,3 +62,9 @@ def test_disk_persistence():
     assert result2==expected_result2
 
     remove_file("test_disk.db")
+
+def test_btree():
+    input1 = [f'insert {i} user{i} user{i}.com' for i in range(3)] + [".btree"] + ['.exit']
+    output1 = run_script(input1);
+    expected_output1 = ["Executed.","Executed.","Executed.","Tree:","leaf (size 3)","  - 0 : 0","  - 1 : 1","  - 2 : 2"]
+    assert output1 == expected_output1
