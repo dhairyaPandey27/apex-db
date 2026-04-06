@@ -68,3 +68,9 @@ def test_btree():
     output1 = run_script(input1);
     expected_output1 = ["Executed.","Executed.","Executed.","Tree:","leaf (size 3)","  - 0 : 0","  - 1 : 1","  - 2 : 2"]
     assert output1 == expected_output1
+
+def test_duplicate_keys():
+    input = ["insert 1 user1 user1.com","insert 1 user1 user1.com","select",".exit"]
+    output = run_script(input)
+    expected_output = ["Executed.","Error: Duplicate Key.","(1, user1, user1.com)","Executed."]
+    assert output==expected_output
